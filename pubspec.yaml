@@ -1,5 +1,5 @@
 name: security_guard
-description: Security app with PIN lock, Intruder Selfie, Vault, and GPS tracker.
+description: Security Guard App
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -9,32 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  
-  # PIN & Storage
   shared_preferences: ^2.2.2
-  flutter_secure_storage: ^9.0.0
-  local_auth: ^2.1.8
-  
-  # Camera (Intruder Selfie)
-  camera: ^0.10.5+9
-  
-  # GPS / Location
-  geolocator: ^11.0.0
-  permission_handler: ^11.3.0
-  
-  # Encryption (Vault)
-  encrypt: ^5.0.3
-  path_provider: ^2.1.2
-  file_picker: ^8.0.3
-  
-  # Notifications
-  flutter_local_notifications: ^17.1.2
-  
-  # UI
-  flutter_spinkit: ^5.2.0
   google_fonts: ^6.2.1
-  animations: ^2.0.11
-  iconsax: ^0.0.8
 
 dev_dependencies:
   flutter_test:
