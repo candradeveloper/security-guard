@@ -20,12 +20,12 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: 🐦 Setup Flutter
+      - name: 🐦 Setup Flutter 3.24.0
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.0'
+          flutter-version: '3.24.0'
           channel: 'stable'
-          cache: true
+          cache: false
 
       - name: 🏗️ Create fresh Flutter project
         run: |
@@ -34,43 +34,14 @@ jobs:
           cp pubspec.yaml temp_project/pubspec.yaml
           mkdir -p temp_project/assets/images
 
-      - name: 🔧 Overwrite build.gradle dengan Kotlin yang benar
-        run: |
-          cat > temp_project/android/build.gradle << 'GRADLE'
-          buildscript {
-              ext.kotlin_version = '1.9.23'
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-              dependencies {
-                  classpath 'com.android.tools.build:gradle:8.1.4'
-                  classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.23"
-              }
-          }
-          allprojects {
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-          }
-          rootProject.buildDir = '../build'
-          subprojects {
-              project.buildDir = "${rootProject.buildDir}/${project.name}"
-          }
-          subprojects {
-              project.evaluationDependsOn(':app')
-          }
-          tasks.register("clean", Delete) {
-              delete rootProject.buildDir
-          }
-          GRADLE
-          echo "=== build.gradle setelah ditulis ulang ==="
-          cat temp_project/android/build.gradle
-
       - name: 🔧 Fix pubspec assets
         run: |
           sed -i '/- assets\/images\//d' temp_project/pubspec.yaml
+
+      - name: 🗑️ Clear Gradle cache
+        run: |
+          rm -rf ~/.gradle/caches
+          rm -rf ~/.gradle/wrapper
 
       - name: 📦 Get packages
         run: |
