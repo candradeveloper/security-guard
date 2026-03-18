@@ -32,7 +32,17 @@ jobs:
           flutter create --org com.nacdev temp_project
           cp -r lib/* temp_project/lib/
           cp pubspec.yaml temp_project/pubspec.yaml
-          cp -r .github temp_project/ 2>/dev/null || true
+          mkdir -p temp_project/assets/images
+
+      - name: 🔧 Fix Kotlin version
+        run: |
+          sed -i "s/ext.kotlin_version = .*/ext.kotlin_version = '1.9.23'/" temp_project/android/build.gradle
+          cat temp_project/android/build.gradle
+
+      - name: 🔧 Fix pubspec assets
+        run: |
+          sed -i '/assets:/,/- assets\/images\//d' temp_project/pubspec.yaml
+          echo "" >> temp_project/pubspec.yaml
 
       - name: 📦 Get packages
         run: |
