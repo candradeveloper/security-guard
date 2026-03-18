@@ -38,6 +38,53 @@ jobs:
         run: |
           sed -i '/- assets\/images\//d' temp_project/pubspec.yaml
 
+      - name: 🔧 Fix app/build.gradle compileSdkVersion
+        run: |
+          cat > temp_project/android/app/build.gradle << 'GRADLE'
+          plugins {
+              id "com.android.application"
+              id "kotlin-android"
+              id "dev.flutter.flutter-gradle-plugin"
+          }
+
+          android {
+              namespace "com.nacdev.temp_project"
+              compileSdkVersion 35
+              ndkVersion "27.0.12077973"
+
+              compileOptions {
+                  sourceCompatibility JavaVersion.VERSION_1_8
+                  targetCompatibility JavaVersion.VERSION_1_8
+              }
+
+              kotlinOptions {
+                  jvmTarget = "1.8"
+              }
+
+              defaultConfig {
+                  applicationId "com.nacdev.security_guard"
+                  minSdkVersion 23
+                  targetSdkVersion 35
+                  versionCode 1
+                  versionName "1.0.0"
+              }
+
+              buildTypes {
+                  release {
+                      signingConfig signingConfigs.debug
+                      minifyEnabled false
+                      shrinkResources false
+                  }
+              }
+          }
+
+          flutter {
+              source "../.."
+          }
+          GRADLE
+          echo "=== app/build.gradle ==="
+          cat temp_project/android/app/build.gradle
+
       - name: 🗑️ Clear Gradle cache
         run: |
           rm -rf ~/.gradle/caches
